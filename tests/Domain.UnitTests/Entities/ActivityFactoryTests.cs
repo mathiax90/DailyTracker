@@ -40,7 +40,7 @@ public class ActivityFactoryTests
             MetricType.Weight,
             1);
 
-        _durationAT = new ActivityType(Guid.NewGuid(),
+        _durationAT = new ActivityType(2,
             "Зарядка",
             MetricType.Duration,
             1);

@@ -1,4 +1,6 @@
-﻿namespace DailyTracker.Domain.Entities;
+﻿using DailyTracker.Domain.Constants;
+
+namespace DailyTracker.Domain.Entities;
 
 /// <summary>
 /// Тип активности/события
@@ -72,9 +74,9 @@ public class ActivityType : BaseAuditableEntity
     /// <param name="name"></param>
     /// <param name="metricType"></param>
     /// <param name="dayLimit"></param>
-    public ActivityType(Guid id, string name, MetricType metricType, int dayLimit = 0) : this(name, metricType, dayLimit)
+    public ActivityType(int sysActTypeId, string name, MetricType metricType, int dayLimit = 0) : this(name, metricType, dayLimit)
     {
-        Id = id;
+        Id = sysActTypeId;
         IsSystem = true;
     }
 }
