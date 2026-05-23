@@ -3,9 +3,10 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//aspire сервисы
 //builder.AddServiceDefaults();
 
+//сервис для безопасного хранения и получения секретов
 //builder.AddKeyVaultIfConfigured();
 builder.AddApplicationServices();
 builder.AddInfrastructureServices();
@@ -26,12 +27,25 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseCors(static builder => 
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors(static builder =>
     builder.AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin());
+}
+else
+{
+    var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',').Select(x => x.Trim()).ToArray() ?? Array.Empty<string>();
+
+    app.UseCors(options => options
+            .WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+}
 
 app.UseFileServer();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -42,6 +56,7 @@ app.UseExceptionHandler(options => { });
 
 app.Map("/", () => Results.Redirect("/scalar"));
 
+//точки доступа для aspire-сервисов
 //app.MapDefaultEndpoints();
 app.MapEndpoints(typeof(Program).Assembly);
 
