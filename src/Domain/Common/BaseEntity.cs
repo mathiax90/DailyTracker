@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DailyTracker.Domain.Common;
 
@@ -6,6 +7,8 @@ public abstract class BaseEntity
 {
     // This can easily be modified to be BaseEntity<T> and public T Id to support different key types.
     // Using non-generic integer types for simplicity
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; protected set; }
 
     private readonly List<BaseEvent> _domainEvents = new();

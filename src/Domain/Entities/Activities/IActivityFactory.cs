@@ -20,7 +20,7 @@ public interface IActivityFactory
         Guid userId,
         ActivityType activityType,
         DateTime date,
-        TimeSpan duration,
+        Duration duration,
         CancellationToken cancellationToken = default);
 
     Task<TimeOfDayActivity> CreateTimeActivityAsync(

@@ -5,7 +5,7 @@
 /// </summary>
 public class WeightActivity : Activity
 {
-    public Weight Weight { get; private set; } = new Weight(10);
+    public Weight Weight { get; private set; } = new Weight(0);
     protected WeightActivity()
     {
         

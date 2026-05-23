@@ -6,6 +6,6 @@ namespace DailyTracker.Domain.Constants;
 
 public class SystemActivityTypes
 {
-    public const int WakeUp = 0;
-    public const int BodyWeight = 1;
+    public const int BodyWeight = -1;
+    public const int WakeUp = -2;
 }

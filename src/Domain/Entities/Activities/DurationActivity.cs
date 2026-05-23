@@ -7,12 +7,12 @@ namespace DailyTracker.Domain.Entities.Activities;
 /// </summary>
 public class DurationActivity : Activity
 {
-    public TimeSpan Duration { get; private set; }
+    public Duration Duration { get; private set; } = new Duration();
     protected DurationActivity()
     {
         
     }
-    internal DurationActivity(Guid userId, ActivityType activityType, DateTime activityDate, TimeSpan duration) : base(userId, activityType, activityDate)
+    internal DurationActivity(Guid userId, ActivityType activityType, DateTime activityDate, Duration duration) : base(userId, activityType, activityDate)
     {
         if (activityType.MetricType != MetricType.Duration)
         {

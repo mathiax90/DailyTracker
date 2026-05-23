@@ -4,6 +4,7 @@ using DailyTracker.Domain.Entities.Activities;
 using DailyTracker.Domain.Enums;
 using DailyTracker.Domain.Exceptions;
 using DailyTracker.Domain.Repositories;
+using DailyTracker.Domain.ValueObjects;
 using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
@@ -76,15 +77,15 @@ public class ActivityFactoryTests
         _repositoryMock.IsActivityLimitReachedAsync(_userId, _durationAT, _activityDate, Arg.Any<CancellationToken>())
             .Returns(false);
 
-        var a = await _factory.CreateDurationActivityAsync(_userId, _durationAT, _activityDate, TimeSpan.FromSeconds(10), CancellationToken.None);
+        var a = await _factory.CreateDurationActivityAsync(_userId, _durationAT, _activityDate, new Duration(TimeSpan.FromSeconds(10)), CancellationToken.None);
         a.ShouldBeOfType<DurationActivity>();
 
-        a.Duration.ShouldBeEquivalentTo(TimeSpan.FromSeconds(10));
+        a.Duration.Value.ShouldBeEquivalentTo(TimeSpan.FromSeconds(10));
     }
 
     [Test]
     public async Task CreateTimeActivityAsync_WhenWrongActivityType_ShouldReturnDurationActivityWithValue()
     {
-        Should.Throw<DomainException>(() => _factory.CreateDurationActivityAsync(_userId, _wakeUpAT, _activityDate, TimeSpan.FromSeconds(10), CancellationToken.None));
+        Should.Throw<DomainException>(() => _factory.CreateDurationActivityAsync(_userId, _wakeUpAT, _activityDate, new Duration(TimeSpan.FromSeconds(10)), CancellationToken.None));
     }
 }

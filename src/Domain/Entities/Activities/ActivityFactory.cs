@@ -13,7 +13,7 @@ public class ActivityFactory : IActivityFactory
     {
         _activityRepository = activityRepository;
     }
-    public async Task<DurationActivity> CreateDurationActivityAsync(Guid userId, ActivityType activityType, DateTime date, TimeSpan duration, CancellationToken cancellationToken = default)
+    public async Task<DurationActivity> CreateDurationActivityAsync(Guid userId, ActivityType activityType, DateTime date, Duration duration, CancellationToken cancellationToken = default)
     {
         await CheckLimitsAsync(userId, activityType, date);
         return new DurationActivity(userId, activityType, date, duration);

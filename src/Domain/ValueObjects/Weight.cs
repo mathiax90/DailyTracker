@@ -4,7 +4,7 @@ public class Weight : ValueObject
 {
     public Weight(double val)
     {
-        if (val <= 0) throw new UnsupportedWeightException();
+        if (val < 0) throw new UnsupportedWeightException();
         Value = val;
     }
 

@@ -1,6 +1,4 @@
-﻿using DailyTracker.Domain.Constants;
-
-namespace DailyTracker.Domain.Entities;
+﻿namespace DailyTracker.Domain.Entities;
 
 /// <summary>
 /// Тип активности/события

@@ -5,8 +5,9 @@
 /// </summary>
 public enum MetricType
 {
-    Duration = 0,
-    Weight = 1,
-    TimeOfDay = 2,
-    Length = 3
+    Base = 0,
+    Duration = 1,
+    Weight = 2,
+    TimeOfDay = 3,
+    Length = 4
 }
