@@ -3,6 +3,11 @@
 
 The project was generated using the [Clean.Architecture.Solution.Template](https://github.com/jasontaylordev/CleanArchitecture) version 10.8.0.
 
+# О проектах решения
+Пока работают только Domain.UnitTests.
+Остальные тесты пока не работают.
+AppHost и TestAppHost связанные с Aspire пока тоже не работают.
+
 ## Build
 
 Run `dotnet build` to build the solution.

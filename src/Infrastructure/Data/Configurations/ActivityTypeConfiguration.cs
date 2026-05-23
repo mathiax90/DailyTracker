@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using DailyTracker.Domain.Constants;
+﻿using DailyTracker.Domain.Constants;
 using DailyTracker.Domain.Entities;
 using DailyTracker.Domain.Enums;
 using Microsoft.EntityFrameworkCore;

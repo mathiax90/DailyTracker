@@ -1,6 +1,5 @@
 ﻿using DailyTracker.Domain.Entities.Activities;
 using DailyTracker.Domain.Enums;
-using DailyTracker.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Activity = DailyTracker.Domain.Entities.Activities.Activity;
@@ -14,6 +13,7 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
         builder.ToTable("Activities");
 
         builder.HasDiscriminator<MetricType>("ActivityKind")
+            .HasValue<Activity>(MetricType.Base)
             .HasValue<WeightActivity>(MetricType.Weight)
             .HasValue<DurationActivity>(MetricType.Duration)
             .HasValue<TimeOfDayActivity>(MetricType.TimeOfDay);
@@ -24,16 +24,5 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
             .IsRequired();
 
         builder.Property(a => a.ActivityDate).IsRequired();
-
-        // 3. Настройка Value Object для WeightActivity
-        builder.OwnsOne(typeof(Weight), "Weight", wp =>
-        {
-            wp.Property("Value")
-              .HasColumnName("WeightValue");
-        });
-
-        // 4. Настройка свойств для DurationActivity
-        builder.Property(typeof(TimeSpan), "Duration")
-           .HasColumnName("Duration");
     }
 }
