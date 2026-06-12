@@ -12,7 +12,8 @@ public class DurationActivity : Activity
     {
         
     }
-    internal DurationActivity(Guid userId, ActivityType activityType, DateTime activityDate, Duration duration) : base(userId, activityType, activityDate)
+    internal DurationActivity(Guid userId, ActivityType activityType, DateTime activityDate, Duration duration) 
+        : base(userId, activityType, activityDate)
     {
         if (activityType.MetricType != MetricType.Duration)
         {
