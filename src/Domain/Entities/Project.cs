@@ -5,5 +5,16 @@
 /// </summary>
 public class Project : BaseAuditableEntity
 {
-    public string Name { get; set; } = "";
+    public Project(int userId, string name)
+    {
+        UserID = userId;
+        Name = name;
+    }
+
+    private Project()
+    {
+        
+    }
+    public int UserID { get; private set; }
+    public string Name { get; private set; } = "";
 }

@@ -7,6 +7,7 @@ public class ActivityType : BaseAuditableEntity
 {
     public string Name { get; set; } = "";
     public MetricType MetricType { get; private set; }
+    public Guid UserId { get; private set; }
     /// <summary>
     /// Признак что объект создан разработчиками, а не пользователем
     /// </summary>
@@ -40,11 +41,13 @@ public class ActivityType : BaseAuditableEntity
     /// <summary>
     /// Создаёт тип события
     /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="name">Название</param>
     /// <param name="metricType">Тип метрики</param>
     /// <param name="dayLimit">Лимит события в день</param>
-    public ActivityType(string name, MetricType metricType, int dayLimit = 0)
+    public ActivityType(Guid userId, string name, MetricType metricType, int dayLimit = 0)
     {
+        UserId = userId;
         Name = name;
         MetricType = metricType;
         DayLimit = dayLimit;
@@ -53,27 +56,31 @@ public class ActivityType : BaseAuditableEntity
     /// <summary>
     /// Создаёт тип события по проекту
     /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="name">Название</param>
     /// <param name="metricType">Тип метрики</param>
     /// <param name="dayLimit">Лимит события в день</param>
     /// <param name="project">Проект</param>
-    public ActivityType(string name, MetricType metricType, Project project, int dayLimit = 0)
+    public ActivityType(Guid userId, string name, MetricType metricType, Project project, int dayLimit = 0):
+        this(userId, name, metricType, dayLimit)
     {
-        Name = name;
-        MetricType = metricType;
-        DayLimit = dayLimit;
         Project = project;
     }
 
     /// <summary>
     /// Создаёт системный тип события (встроенный в систему)
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="sysActTypeId"></param>
+    /// <param name="userId"></param>
     /// <param name="name"></param>
     /// <param name="metricType"></param>
     /// <param name="dayLimit"></param>
-    public ActivityType(int sysActTypeId, string name, MetricType metricType, int dayLimit = 0) : this(name, metricType, dayLimit)
+    public ActivityType(int sysActTypeId, Guid userId, string name, MetricType metricType, int dayLimit = 0) : this(userId, name, metricType, dayLimit)
     {
+        if (sysActTypeId >= 0)
+        {
+            throw new DomainException("Системные типы событий должны иметь отрицательный идентификатор.");
+        }
         Id = sysActTypeId;
         IsSystem = true;
     }

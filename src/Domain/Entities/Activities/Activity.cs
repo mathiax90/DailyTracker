@@ -14,6 +14,8 @@ public class Activity : BaseAuditableEntity
     }
     internal Activity(Guid userId, ActivityType activityType, DateTime activityDate)
     {
+        UserId = userId;
+        ActivityType = activityType;
         ActivityDate = activityDate;
     }
 }
