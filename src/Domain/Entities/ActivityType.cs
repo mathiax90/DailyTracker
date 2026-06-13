@@ -7,7 +7,7 @@ public class ActivityType : BaseAuditableEntity
 {
     public string Name { get; set; } = "";
     public MetricType MetricType { get; private set; }
-    public Guid? UserId { get; private set; }
+    public Guid UserId { get; private set; }
     /// <summary>
     /// Признак что объект создан разработчиками, а не пользователем
     /// </summary>
@@ -75,17 +75,12 @@ public class ActivityType : BaseAuditableEntity
     /// <param name="name"></param>
     /// <param name="metricType"></param>
     /// <param name="dayLimit"></param>
-    public ActivityType(int sysActTypeId, string name, MetricType metricType, int dayLimit = 0)
+    public ActivityType(int sysActTypeId, Guid userId, string name, MetricType metricType, int dayLimit = 0) : this(userId, name, metricType, dayLimit)
     {
-        Name = name;
-        MetricType = metricType;
-        DayLimit = dayLimit;
-        
         if (sysActTypeId >= 0)
         {
             throw new DomainException("Системные типы событий должны иметь отрицательный идентификатор.");
         }
-
         Id = sysActTypeId;
         IsSystem = true;
     }

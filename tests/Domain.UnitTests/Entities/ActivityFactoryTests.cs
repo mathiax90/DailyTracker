@@ -29,21 +29,19 @@ public class ActivityFactoryTests
         // Передаем мок в конструктор фабрики
         _factory = new ActivityFactory(_repositoryMock);
 
-        _userId = new Guid();
+        _userId = Guid.NewGuid();
 
         _wakeUpAT = new ActivityType(SystemActivityTypes.WakeUp,
-            new Guid(),
-            "Время пробуждения",
+            "Пробуждение",
             MetricType.TimeOfDay,
             1);
 
         _weightAT = new ActivityType(SystemActivityTypes.BodyWeight,
-            new Guid(),
             "Вес тела",
             MetricType.Weight,
-            3);
+            1);
 
-        _durationAT = new ActivityType(_userId,
+        _durationAT = new ActivityType(2,
             "Зарядка",
             MetricType.Duration,
             1);
@@ -62,7 +60,7 @@ public class ActivityFactoryTests
     }
 
     [Test]
-    public async Task CreateWeightActivityAsync_ShouldReturnWeightActivityWithValue()
+    public async Task CreateTimeActivityAsync_ShouldReturnWeightActivityWithValue()
     {
         _repositoryMock.IsActivityLimitReachedAsync(_userId, _weightAT, _activityDate, Arg.Any<CancellationToken>())
         .Returns(false);
@@ -74,20 +72,20 @@ public class ActivityFactoryTests
     }
 
     [Test]
-    public async Task CreateDurationActivityAsync_ShouldReturnDurationActivityWithValue()
+    public async Task CreateTimeActivityAsync_ShouldReturnDurationActivityWithValue()
     {
         _repositoryMock.IsActivityLimitReachedAsync(_userId, _durationAT, _activityDate, Arg.Any<CancellationToken>())
             .Returns(false);
 
-        var a = await _factory.CreateDurationActivityAsync(_userId, _durationAT, _activityDate, TimeSpan.FromSeconds(10), CancellationToken.None);
+        var a = await _factory.CreateDurationActivityAsync(_userId, _durationAT, _activityDate, new Duration(TimeSpan.FromSeconds(10)), CancellationToken.None);
         a.ShouldBeOfType<DurationActivity>();
 
         a.Duration.Value.ShouldBeEquivalentTo(TimeSpan.FromSeconds(10));
     }
 
     [Test]
-    public async Task CreateDurationActivityAsync_WhenWrongActivityType_ShouldReturnDurationActivityWithValue()
+    public async Task CreateTimeActivityAsync_WhenWrongActivityType_ShouldReturnDurationActivityWithValue()
     {
-        Should.Throw<DomainException>(() => _factory.CreateDurationActivityAsync(_userId, _wakeUpAT, _activityDate, TimeSpan.FromSeconds(10), CancellationToken.None));
+        Should.Throw<DomainException>(() => _factory.CreateDurationActivityAsync(_userId, _wakeUpAT, _activityDate, new Duration(TimeSpan.FromSeconds(10)), CancellationToken.None));
     }
 }

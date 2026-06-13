@@ -14,21 +14,18 @@ builder.AddWebServices();
 
 var app = builder.Build();
 
-bool seedMode = args.Contains("--seed");
-
-// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-app.UseHsts();
-app.UseHttpsRedirection();
-
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    await app.InitialiseAndSeedDbAsync();
+    await app.InitialiseDatabaseAsync();
 }
-else if (seedMode)
+else
 {
-    await app.SeedDbAsync();
-    return;
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
 {
