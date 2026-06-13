@@ -5,7 +5,7 @@
 /// </summary>
 public class Project : BaseAuditableEntity
 {
-    public Project(int userId, string name)
+    public Project(Guid userId, string name)
     {
         UserID = userId;
         Name = name;
@@ -15,6 +15,6 @@ public class Project : BaseAuditableEntity
     {
         
     }
-    public int UserID { get; private set; }
+    public Guid UserID { get; private set; }
     public string Name { get; private set; } = "";
 }
