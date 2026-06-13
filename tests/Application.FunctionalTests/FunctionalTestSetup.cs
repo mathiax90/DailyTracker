@@ -1,3 +1,4 @@
+using DailyTracker.Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DailyTracker.Application.FunctionalTests;
@@ -11,6 +12,11 @@ public class FunctionalTestSetup
     private static WebApiFactory? _factory;
     private static DistributedApplication? _app;
 
+    /// <summary>
+    /// Запуск один раз перед всеми тестами.
+    /// Получаем подключение к БД и настраиваем необходимые статик переменные.
+    /// </summary>
+    /// <returns></returns>
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
@@ -45,6 +51,11 @@ public class FunctionalTestSetup
         DbResetter = await DatabaseResetter.CreateAsync(connectionString);
     }
 
+    /// <summary>
+    /// Запуск один раз по окончании тестов.
+    /// Стирает все данные из БД.
+    /// </summary>
+    /// <returns></returns>
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {

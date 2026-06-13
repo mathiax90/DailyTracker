@@ -5,7 +5,7 @@ using DailyTracker.Domain.Entities;
 
 namespace DailyTracker.Application.FunctionalTests.TodoItems.Commands;
 
-public class CreateTodoItemTests : TestBase
+public class CreateTodoItemTests : CleanTestBase
 {
     [Test]
     public async Task ShouldRequireMinimumFields()
