@@ -3,7 +3,7 @@
 public class UnsupportedWeightException : Exception
 {
     public UnsupportedWeightException()
-        : base("Weight cannot be less than or equal to zero.")
+        : base("Вес должен быть больше или равен нулю.")
     {
     }
 }
