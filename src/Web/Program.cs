@@ -24,7 +24,8 @@ if (app.Environment.IsDevelopment())
 {
     await app.InitialiseAndSeedDbAsync();
 }
-else if (seedMode)
+
+if (app.Environment.IsProduction() && seedMode)
 {
     await app.SeedDbAsync();
     return;
