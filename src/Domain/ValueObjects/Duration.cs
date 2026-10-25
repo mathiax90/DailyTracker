@@ -4,7 +4,7 @@ public class Duration : ValueObject
 {
     public Duration(TimeSpan val)
     {
-        if (val <= TimeSpan.Zero) throw new DomainException("Длительность события не может быть меньше или ровна нуля.");
+        if (val <= TimeSpan.Zero || val > TimeSpan.FromHours(24)) throw new UnsupportedDurationException();
         Value = val;
     }
 
