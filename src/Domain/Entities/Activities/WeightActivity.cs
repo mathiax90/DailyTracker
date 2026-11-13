@@ -6,6 +6,7 @@
 public class WeightActivity : Activity
 {
     public Weight Weight { get; private set; } = new Weight(0);
+    public override string MetricValue => $"{Weight.Value} кг";
     protected WeightActivity()
     {
         

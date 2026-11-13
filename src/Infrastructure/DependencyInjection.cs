@@ -1,7 +1,9 @@
 ﻿using DailyTracker.Application.Common.Interfaces;
+using DailyTracker.Domain.Repositories;
 using DailyTracker.Infrastructure.Data;
 using DailyTracker.Infrastructure.Data.Interceptors;
 using DailyTracker.Infrastructure.Identity;
+using DailyTracker.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -29,6 +31,10 @@ public static class DependencyInjection
 
 
         builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        //builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+        builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 
         builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 

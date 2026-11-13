@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 
 namespace DailyTracker.Domain.Entities.Activities;
 
@@ -7,6 +8,8 @@ namespace DailyTracker.Domain.Entities.Activities;
 /// </summary>
 public class TimeOfDayActivity : Activity
 {
+
+    public override string MetricValue => $"{ActivityDate.ToString(new CultureInfo("ru-RU"))}";
     protected TimeOfDayActivity()
     {
         

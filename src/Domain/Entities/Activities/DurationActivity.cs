@@ -8,6 +8,7 @@ namespace DailyTracker.Domain.Entities.Activities;
 public class DurationActivity : Activity
 {
     public Duration Duration { get; private set; } = new Duration();
+    public override string MetricValue => $"{(int)Duration.Value.TotalHours:D2}:{Duration.Value.Minutes:D2} ({(int)Duration.Value.TotalMinutes} мин.)";
     protected DurationActivity()
     {
         

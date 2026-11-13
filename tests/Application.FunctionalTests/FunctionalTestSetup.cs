@@ -35,7 +35,7 @@ public class FunctionalTestSetup
 
         _app = await builder
             .BuildAsync(cancellationToken)
-            .WaitAsync(cancellationToken);
+        .WaitAsync(cancellationToken);
 
         await _app
             .StartAsync(cancellationToken)
@@ -59,8 +59,30 @@ public class FunctionalTestSetup
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        if (DbResetter is not null) await DbResetter.DisposeAsync();
-        if (_app is not null) await _app.DisposeAsync();
-        if (_factory is not null) await _factory.DisposeAsync();
+        // 1. Сначала закрываем WebApiFactory, чтобы разорвать все активные HTTP-клиенты и пулы подключений к БД
+        if (_factory is not null)
+            await _factory.DisposeAsync();
+
+        if (_app is not null)
+        {
+            try
+            {
+                // 2. Явно и мягко останавливаем контейнеры Aspire перед очисткой ресурсов
+                await _app.StopAsync();
+            }
+            catch (Exception)
+            {
+                // Игнорируем исключения отмены при жестком закрытии отладчика IDE
+            }
+            finally
+            {
+                // 3. Уничтожаем сам хост Aspire
+                await _app.DisposeAsync();
+            }
+        }
+
+        // 4. В последнюю очередь уничтожаем ресеттер
+        if (DbResetter is not null)
+            await DbResetter.DisposeAsync();
     }
 }

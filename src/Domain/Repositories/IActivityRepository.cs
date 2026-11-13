@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DailyTracker.Domain.Entities.Activities;
 
 namespace DailyTracker.Domain.Repositories;
 
 public interface IActivityRepository
 {
+    Task AddAsync(Activity activity);
+    
     /// <summary>
     /// Проверяет достигнут ли лимит события
     /// </summary>

@@ -13,11 +13,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<TodoList> TodoLists => Set<TodoList>();
-
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
-    public DbSet<ActivityType> ActivityTypes => Set<ActivityType>();
-    public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Project> Projects => Set<Project>();
+
+    internal DbSet<ActivityType> ActivityTypesSet => Set<ActivityType>();
+    internal DbSet<Activity> ActivitiesSet => Set<Activity>();
+    IQueryable<Activity> IApplicationDbContext.Activities => ActivitiesSet.AsNoTracking();
+    IQueryable<ActivityType> IApplicationDbContext.ActivityTypes => ActivityTypesSet.AsNoTracking();
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
