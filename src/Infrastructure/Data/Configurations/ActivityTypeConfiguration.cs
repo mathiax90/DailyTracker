@@ -18,7 +18,11 @@ public class ActivityTypeConfiguration : IEntityTypeConfiguration<ActivityType>
             new ActivityType(SystemActivityTypes.BodyWeight,
             "Вес тела",
             MetricType.Weight,
-            3)
+            2),
+            new ActivityType(SystemActivityTypes.Work,
+            "Работа",
+            MetricType.Duration,
+            10)
         );
     }
 }

@@ -13,7 +13,7 @@ public class WeightActivityConfiguration : IEntityTypeConfiguration<WeightActivi
             .HasColumnName("WeightValue")
             .HasConversion(
                 // 1. Как сохранять в БД: приводим объект к nullable типу double?
-                weight => (double?)weight.Value,
+                weight => (decimal?)weight.Value,
 
                 // 2. Как читать из БД: если в базе NULL, возвращаем фиктивный null для EF, 
                 // но для строк с типом 'Weight' там ВСЕГДА будет число, и создастся нормальный Weight.
