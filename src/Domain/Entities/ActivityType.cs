@@ -13,7 +13,7 @@ public class ActivityType : BaseAuditableEntity
     /// <summary>
     /// Признак что объект создан разработчиками, а не пользователем
     /// </summary>
-    public bool IsSystem { get; private set; } = false;
+    public bool IsSystem => !UserId.HasValue;
     public int? ProjectId { get; private set; }
     public Project? Project { get; private set; }
     private int _dayLimit = 0;
@@ -96,6 +96,24 @@ public class ActivityType : BaseAuditableEntity
         }
 
         Id = sysActTypeId;
-        IsSystem = true;
+    }
+
+    public ActivityTypeDeleteToken Delete()
+    {
+        if (IsSystem)
+            throw new DomainException("Запрещено удалять системные события!");
+        return new ActivityTypeDeleteToken(this);
+    }
+
+    /// <summary>
+    /// Токен подтверждающий возможность удаления
+    /// </summary>
+    public sealed class ActivityTypeDeleteToken
+    {
+        public ActivityType ActivityType { get; private set; }
+        internal ActivityTypeDeleteToken(ActivityType activityType)
+        {
+            ActivityType = activityType;
+        }
     }
 }

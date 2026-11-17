@@ -32,4 +32,9 @@ public class ActivityRepository : IActivityRepository
 
         return sameDayActivitiesCount >= activityType.DayLimit;
     }
+
+    public void Remove(Activity a)
+    {
+        _context.ActivitiesSet.Remove(a);
+    }
 }

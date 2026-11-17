@@ -1,7 +1,10 @@
 ﻿using DailyTracker.Application.Common.Interfaces;
+using DailyTracker.Domain.Exceptions;
 using DailyTracker.Infrastructure.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Npgsql;
 
 namespace DailyTracker.Infrastructure;
 
@@ -17,7 +20,14 @@ internal class UnitOfWork : IUnitOfWork
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.SaveChangesAsync(cancellationToken);
+        try
+        {
+            return await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: "23503" })
+        {
+            throw new DomainException("Невозможно удалить объект, так как на него ссылаются другие записи.");
+        }
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

@@ -21,7 +21,8 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
         builder.HasOne(a => a.ActivityType)
             .WithMany()
             .HasForeignKey("ActivityTypeId")
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(a => a.ActivityDate).IsRequired();
     }

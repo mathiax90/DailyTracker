@@ -16,4 +16,5 @@ public interface IActivityRepository
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<bool> IsActivityLimitReachedAsync(Guid userId, ActivityType activityType, DateTime date, CancellationToken cancellationToken = default);
+    void Remove(Activity a);
 }

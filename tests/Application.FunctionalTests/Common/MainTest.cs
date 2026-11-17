@@ -1,7 +1,9 @@
 ﻿using DailyTracker.Application.Activities.Commands.CreateActivityCommand;
+using DailyTracker.Application.Activities.Commands.DeleteActivity;
 using DailyTracker.Application.Activities.Commands.UpdateActivity;
 using DailyTracker.Application.Activities.Queries.ActivityQuery;
 using DailyTracker.Application.ActivityTypes.Commands.CreateActivityTypeCommand;
+using DailyTracker.Application.ActivityTypes.Commands.DeleteActivityType;
 using DailyTracker.Application.ActivityTypes.Queries.ActivityTypeQuery;
 using DailyTracker.Domain.Constants;
 using DailyTracker.Domain.Exceptions;
@@ -107,6 +109,43 @@ public class MainTest : CleanTestBase
 
         var limitException = await Should.ThrowAsync<DomainException>(() => TestApp.SendAsync(createActivityCommand));
         limitException.Message.ShouldContain("Достигнут лимит событий");
-        #endregion 
+        #endregion
+
+        #region Удаление Пользовательского типа события с получением ошибки
+        DeleteActivityTypeCommand deleteActivityTypeCmd = new DeleteActivityTypeCommand(userId, daytimeSleepATId);
+        
+        var hasChildException = await Should.ThrowAsync<DomainException>(() => TestApp.SendAsync(deleteActivityTypeCmd));
+        hasChildException.Message.ShouldBe("Невозможно удалить объект, так как на него ссылаются другие записи.");
+        #endregion
+
+        #region Удаление События с пользовательским типом
+        DeleteActivityCommand deleteActivityCmd = new DeleteActivityCommand(userId, userTypeActivityDto.Id);
+        await TestApp.SendAsync(deleteActivityCmd);
+        
+        DateTime fromDate = new DateTime(2026, 10, 10, 0, 0, 0, DateTimeKind.Utc);
+        DateTime toDate = new DateTime(2026, 10, 11, 0, 0, 0, DateTimeKind.Utc);
+
+        activityQuery = new ActivityQuery(userId, null, fromDate, toDate);
+        activities = await TestApp.SendAsync(activityQuery);
+
+        activities.ShouldNotBeNull();
+        activities.Count().ShouldBe(1);
+        #endregion
+
+        #region Удаление Пользовательского типа события с успехом
+        //Дано: Пользователь с 4 Типами событий
+
+
+        //Когда: Удаляем типы событий и запрашиваем типы событий пользователя
+        await TestApp.SendAsync(deleteActivityTypeCmd);
+
+        activityTypeQuery = new ActivityTypeQuery(userId, null);
+        activityTypes = await TestApp.SendAsync(activityTypeQuery);
+
+        //Тогда: Получаем 3 типа событий
+        activityTypes.ShouldNotBeNull();
+        activityTypes.Count().ShouldBe(3);
+
+        #endregion
     }
 }

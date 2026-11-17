@@ -23,4 +23,9 @@ public class ActivityTypeRepository : IActivityTypeRepository
     {
         await _context.ActivityTypesSet.AddAsync(activityType);
     }
+
+    public void Remove(ActivityType.ActivityTypeDeleteToken deleteToken)
+    {
+        _context.ActivityTypesSet.Remove(deleteToken.ActivityType);
+    }
 }

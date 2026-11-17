@@ -68,7 +68,7 @@ public class ActivityQueryHandler : IRequestHandler<ActivityQuery, List<Activity
         else if (request.FromDate.HasValue && request.ToDate.HasValue)
         {
             query = query.Where(x => x.ActivityDate >= request.FromDate.Value
-                                  && x.ActivityDate <= request.ToDate.Value);
+                                  && x.ActivityDate < request.ToDate.Value);
         }
         else
         {
