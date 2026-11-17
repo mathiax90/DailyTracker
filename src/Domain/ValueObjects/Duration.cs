@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace DailyTracker.Domain.ValueObjects;
 
 public class Duration : ValueObject
@@ -21,5 +23,23 @@ public class Duration : ValueObject
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
+    }
+
+    internal static TimeSpan Parse(string? metricValue)
+    {
+        if (!string.IsNullOrEmpty(metricValue))
+        {
+            Regex regex = new Regex(@"^((0[0-9])|(1[1-9])|(2[0-3])):[0-5]\d:[0-5]\d$");
+            if (regex.IsMatch(metricValue))
+            {
+                return TimeSpan.Parse(metricValue);
+            }
+            else if (int.TryParse(metricValue, out int durationInMinutes))
+            {
+                return TimeSpan.FromMinutes(durationInMinutes);
+            }
+        }
+
+        throw new DomainException("Ошибка парсинга длительности.");
     }
 }

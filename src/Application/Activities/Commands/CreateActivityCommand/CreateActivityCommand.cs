@@ -36,7 +36,7 @@ public class CreateActivityCommandHandler : IRequestHandler<CreateActivityComman
     {
         ActivityFactory _factory = new ActivityFactory(_activityRepository);
 
-        ActivityType? activityType = await _activityTypeRepository.GetByIdAsync(request.ActivityTypeId);
+        ActivityType? activityType = await _activityTypeRepository.GetByIdAsync(request.UserId, request.ActivityTypeId);
 
         Guard.Against.Null(activityType);
 
@@ -44,8 +44,8 @@ public class CreateActivityCommandHandler : IRequestHandler<CreateActivityComman
 
         await _activityRepository.AddAsync(activity);
         
-        return await _uow.SaveChangesAsync(cancellationToken);
+        await _uow.SaveChangesAsync(cancellationToken);
 
-        //return activity.Id;
+        return activity.Id;
     }
 }

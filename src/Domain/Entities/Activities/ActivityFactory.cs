@@ -20,11 +20,9 @@ public class ActivityFactory : IActivityFactory
         switch (activityType.MetricType)
         {
             case MetricType.Weight:
-                decimal weight = ParseWeight(metricValue);
-                return await CreateWeightActivityAsync(userId, activityType, date, weight, cancellationToken);
+                return await CreateWeightActivityAsync(userId, activityType, date, Weight.Parse(metricValue), cancellationToken);
             case MetricType.Duration:
-                TimeSpan durationTimeSpan = ParseDuration(metricValue);
-                return await CreateDurationActivityAsync(userId, activityType, date, durationTimeSpan, cancellationToken);
+                return await CreateDurationActivityAsync(userId, activityType, date, Duration.Parse(metricValue), cancellationToken);
             case MetricType.TimeOfDay:
                 DateTime dt = new DateTime();
                 if (!string.IsNullOrEmpty(metricValue))
@@ -37,7 +35,7 @@ public class ActivityFactory : IActivityFactory
         }
     }
 
-    private DateTime ParseDateTime(string? metricValue)
+    internal static DateTime ParseDateTime(string? metricValue)
     {
         CultureInfo ruCI = new CultureInfo("ru-RU");
 
@@ -51,32 +49,6 @@ public class ActivityFactory : IActivityFactory
         }
             
         throw new DomainException("Ошибка парсинга даты и/или времени.");
-    }
-
-    private TimeSpan ParseDuration(string? metricValue)
-    {
-        if (!string.IsNullOrEmpty(metricValue))
-        {
-            Regex regex = new Regex(@"^((0[0-9])|(1[1-9])|(2[0-3])):[0-5]\d:[0-5]\d$");
-            if (regex.IsMatch(metricValue))
-            {
-                return TimeSpan.Parse(metricValue);
-            }
-            else if (int.TryParse(metricValue, out int durationInMinutes))
-            {
-                return TimeSpan.FromMinutes(durationInMinutes);
-            }
-        }
-
-        throw new DomainException("Ошибка парсинга длительности.");
-    }
-
-    private decimal ParseWeight(string? metricValue)
-    {
-        if (Decimal.TryParse(metricValue?.Replace(",", "."), CultureInfo.InvariantCulture, out decimal weight))
-            return weight;
-        else
-            throw new DomainException("Ошибка парсинга веса.");
     }
 
     internal async Task<DurationActivity> CreateDurationActivityAsync(Guid userId, ActivityType activityType, DateTime date, TimeSpan duration, CancellationToken cancellationToken = default)

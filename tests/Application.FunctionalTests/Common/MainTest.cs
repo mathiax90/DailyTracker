@@ -11,7 +11,7 @@ public class MainTest : CleanTestBase
     [Test]
     public async Task MainCase()
     {
-        //Создание события с системным типом
+        #region Создание События с Системным типом
         //Дано: Пользователь и Системные типы событий
         Guid userId = Guid.Parse(await TestApp.RunAsDefaultUserAsync());
 
@@ -29,11 +29,12 @@ public class MainTest : CleanTestBase
         activities[0].Id.ShouldBe(activityId);
         activities[0].UserId.ShouldBe(userId);
         activities[0].MetricValue.ShouldBe("00:10 (10 мин.)");
+        #endregion
 
-        //Создание Пользователького типа события
+        #region Создание Пользователького типа события
         //Дано: Пользователь
 
-        //Когда: Создаём Тип события
+        //Когда: Создаём Пользовательский тип события
         CreateActivityTypeCommand createActivityTypeCommand = new CreateActivityTypeCommand(userId, "Длительность дневного сна", Domain.Enums.MetricType.Duration, null, 2);
         int daytimeSleepATId = await TestApp.SendAsync(createActivityTypeCommand);
 
@@ -46,8 +47,10 @@ public class MainTest : CleanTestBase
         activityTypes[0].Id.ShouldBe(daytimeSleepATId);
         activityTypes[0].UserId.ShouldBe(userId);
         activityTypes[0].Name.ShouldBe("Длительность дневного сна");
+        #endregion
 
-        //получение всех типов событий для пользователя
+        #region Получение всех типов событий для пользователя
+        //Дано: Пользователь с одним Пользовательским типом события и тремя системными
 
         //Дано: Пользователь с одним Типом события и тремя системными
 
@@ -58,6 +61,7 @@ public class MainTest : CleanTestBase
         //Тогда: Получаем 4 типа событий
         activityTypes.ShouldNotBeNull();
         activityTypes.Count().ShouldBe(4);
+        #endregion
 
 
         //item.ShouldNotBeNull();
