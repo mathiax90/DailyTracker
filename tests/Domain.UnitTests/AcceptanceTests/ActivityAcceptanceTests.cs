@@ -31,7 +31,7 @@ public class ActivityAcceptanceTests
         // Передаем мок в конструктор фабрики
         _factory = new ActivityFactory(_repositoryMock);
 
-        _userId = new Guid();
+        _userId = Guid.NewGuid();
 
         _wakeUpAT = new ActivityType(SystemActivityTypes.WakeUp,
             "Время пробуждения",
