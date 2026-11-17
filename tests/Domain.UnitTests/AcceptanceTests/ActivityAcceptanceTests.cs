@@ -15,7 +15,7 @@ namespace DailyTracker.Domain.UnitTests.AcceptanceTests;
 public class ActivityAcceptanceTests
 {
     private IActivityRepository _repositoryMock;
-    private ActivityFactory _factory;
+    private ActivityService _factory;
     private Guid _userId;
     private ActivityType _wakeUpAT;
     private ActivityType _weightAT;
@@ -29,7 +29,7 @@ public class ActivityAcceptanceTests
         _repositoryMock = Substitute.For<IActivityRepository>();
 
         // Передаем мок в конструктор фабрики
-        _factory = new ActivityFactory(_repositoryMock);
+        _factory = new ActivityService(_repositoryMock);
 
         _userId = Guid.NewGuid();
 

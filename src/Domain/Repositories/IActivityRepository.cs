@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DailyTracker.Domain.Entities.Activities;
+﻿using DailyTracker.Domain.Entities.Activities;
 
 namespace DailyTracker.Domain.Repositories;
 
 public interface IActivityRepository
 {
+    Task<Activity?> GetByIdAsync(Guid userId, int activityId, CancellationToken ct = default);
     Task AddAsync(Activity activity);
     
     /// <summary>

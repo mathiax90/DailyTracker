@@ -34,7 +34,7 @@ public class CreateActivityCommandHandler : IRequestHandler<CreateActivityComman
 
     public async Task<int> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
     {
-        ActivityFactory _factory = new ActivityFactory(_activityRepository);
+        ActivityService _factory = new ActivityService(_activityRepository);
 
         ActivityType? activityType = await _activityTypeRepository.GetByIdAsync(request.UserId, request.ActivityTypeId);
 

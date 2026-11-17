@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-
+﻿
 namespace DailyTracker.Domain.Entities.Activities;
 
 /// <summary>
@@ -21,5 +20,11 @@ public class DurationActivity : Activity
             throw new DomainException("Невернтый тип метрики для данного события.");
         }
         Duration = duration;
+    }
+
+    internal override void Update(DateTime activityDate, string metric)
+    {
+        base.Update(activityDate, metric);
+        Duration = Duration.Parse(metric);
     }
 }

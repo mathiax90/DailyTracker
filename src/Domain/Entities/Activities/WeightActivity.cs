@@ -19,4 +19,10 @@ public class WeightActivity : Activity
         }
         Weight = weight;
     }
+
+    internal override void Update(DateTime activityDate, string metric)
+    {
+        base.Update(activityDate, metric);
+        Weight = Weight.Parse(metric);
+    }
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace DailyTracker.Domain.Entities.Activities;
 
@@ -20,5 +19,16 @@ public class TimeOfDayActivity : Activity
         {
             throw new DomainException("Невернтый тип метрики для данного события.");
         }
+    }
+
+    internal override void Update(DateTime activityDate, string metric)
+    {
+        DateTime dt = new DateTime();
+        if (!string.IsNullOrEmpty(metric))
+            dt = ActivityService.ParseDateTime(metric);
+        else
+            dt = activityDate;
+
+        this.ActivityDate = dt;
     }
 }

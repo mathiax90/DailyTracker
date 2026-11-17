@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DailyTracker.Domain.Entities;
+﻿using DailyTracker.Domain.Entities;
 using DailyTracker.Domain.Entities.Activities;
 using DailyTracker.Domain.Repositories;
 using DailyTracker.Infrastructure.Data;
@@ -20,6 +17,11 @@ public class ActivityRepository : IActivityRepository
     public async Task AddAsync(Activity activity)
     {
         await _context.ActivitiesSet.AddAsync(activity);
+    }
+
+    public async Task<Activity?> GetByIdAsync(Guid userId, int activityId, CancellationToken ct = default)
+    {
+        return _context.ActivitiesSet.FirstOrDefault(x => x.UserId == userId && x.Id == activityId);
     }
 
     public async Task<bool> IsActivityLimitReachedAsync(Guid userId, ActivityType activityType, DateTime date, CancellationToken cancellationToken = default)

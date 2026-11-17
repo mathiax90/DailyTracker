@@ -1,16 +1,15 @@
 ﻿using System.Globalization;
-using System.Text.RegularExpressions;
 using DailyTracker.Domain.Repositories;
 
 namespace DailyTracker.Domain.Entities.Activities;
 
-public class ActivityFactory : IActivityFactory
+public class ActivityService
 {
     private readonly IActivityRepository _activityRepository;
 
     
 
-    public ActivityFactory(IActivityRepository activityRepository)
+    public ActivityService(IActivityRepository activityRepository)
     {
         _activityRepository = activityRepository;
     }
@@ -51,11 +50,10 @@ public class ActivityFactory : IActivityFactory
         throw new DomainException("Ошибка парсинга даты и/или времени.");
     }
 
-    internal async Task<DurationActivity> CreateDurationActivityAsync(Guid userId, ActivityType activityType, DateTime date, TimeSpan duration, CancellationToken cancellationToken = default)
+    internal async Task<DurationActivity> CreateDurationActivityAsync(Guid userId, ActivityType activityType, DateTime date, Duration duration, CancellationToken cancellationToken = default)
     {
-        Duration d = new Duration(duration);
         await CheckLimitsAsync(userId, activityType, date);
-        return new DurationActivity(userId, activityType, date, d);
+        return new DurationActivity(userId, activityType, date, duration);
     }
 
     internal async Task<TimeOfDayActivity> CreateTimeActivityAsync(Guid userId, ActivityType activityType, DateTime date, CancellationToken cancellationToken = default)
@@ -64,10 +62,10 @@ public class ActivityFactory : IActivityFactory
         return new TimeOfDayActivity(userId, activityType, date);
     }
 
-    internal async Task<WeightActivity> CreateWeightActivityAsync(Guid userId, ActivityType activityType, DateTime date, decimal weight, CancellationToken cancellationToken = default)
+    internal async Task<WeightActivity> CreateWeightActivityAsync(Guid userId, ActivityType activityType, DateTime date, Weight weight, CancellationToken cancellationToken = default)
     {
         await CheckLimitsAsync(userId, activityType, date);
-        return new WeightActivity(userId, activityType, date, new Weight(weight));
+        return new WeightActivity(userId, activityType, date, weight);
     }
 
     /// <summary>
@@ -84,5 +82,12 @@ public class ActivityFactory : IActivityFactory
         {
             throw new DomainException($"Достигнут лимит событий {activityType.Name} такого типа на дату {date}");
         }
+    }
+
+    public async Task UpdateAsync(Activity activity, DateTime activityDate, string metric)
+    {
+        if (activity.ActivityDate.Date != activityDate.Date)
+            await CheckLimitsAsync(activity.UserId, activity.ActivityType, activityDate);
+        activity.Update(activityDate, metric);
     }
 }

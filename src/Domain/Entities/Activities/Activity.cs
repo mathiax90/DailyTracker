@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 
 namespace DailyTracker.Domain.Entities.Activities;
 
@@ -24,5 +23,10 @@ public class Activity : BaseAuditableEntity
         UserId = userId;
         ActivityType = activityType;
         ActivityDate = activityDate;
+    }
+
+    internal virtual void Update(DateTime activityDate, string metric)
+    {
+        this.ActivityDate = activityDate;
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DailyTracker.Domain.Entities;
+﻿using DailyTracker.Domain.Entities;
 using DailyTracker.Domain.Repositories;
 using DailyTracker.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace DailyTracker.Infrastructure.Repositories;
 
@@ -17,9 +13,10 @@ public class ActivityTypeRepository : IActivityTypeRepository
         _context = context;
     }
 
-    public async Task<ActivityType?> GetByIdAsync(int id, CancellationToken ct = default)
+    public async Task<ActivityType?> GetByIdAsync(Guid userId, int activityTypeId, CancellationToken ct = default)
     {
-        return _context.ActivityTypesSet.FirstOrDefault(x => x.Id == id);
+        return _context.ActivityTypesSet.FirstOrDefault(x => (x.UserId == userId || x.UserId == null)
+        && x.Id == activityTypeId);
     }
 
     public async Task AddAsync(ActivityType activityType)
