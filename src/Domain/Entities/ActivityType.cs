@@ -105,6 +105,12 @@ public class ActivityType : BaseAuditableEntity
         return new ActivityTypeDeleteToken(this);
     }
 
+    public void Rename(string name)
+    {
+        Guard.Against.NullOrWhiteSpace(name);
+        this.Name = name;
+    }
+
     /// <summary>
     /// Токен подтверждающий возможность удаления
     /// </summary>

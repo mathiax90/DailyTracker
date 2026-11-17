@@ -4,6 +4,7 @@ using DailyTracker.Application.Activities.Commands.UpdateActivity;
 using DailyTracker.Application.Activities.Queries.ActivityQuery;
 using DailyTracker.Application.ActivityTypes.Commands.CreateActivityTypeCommand;
 using DailyTracker.Application.ActivityTypes.Commands.DeleteActivityType;
+using DailyTracker.Application.ActivityTypes.Commands.UpdateActivityType;
 using DailyTracker.Application.ActivityTypes.Queries.ActivityTypeQuery;
 using DailyTracker.Domain.Constants;
 using DailyTracker.Domain.Exceptions;
@@ -51,6 +52,24 @@ public class MainTest : CleanTestBase
         activityTypes[0].Id.ShouldBe(daytimeSleepATId);
         activityTypes[0].UserId.ShouldBe(userId);
         activityTypes[0].Name.ShouldBe("Длительность дневного сна");
+        #endregion
+
+        #region Изменение Имени Пользователького типа события
+        //Дано: пользовательский тип события
+
+        //Когда: Создаём Пользовательский тип события
+        UpdateActivityTypeCommand updateActivityTypeCmd = new UpdateActivityTypeCommand(userId, daytimeSleepATId, "Дневной сон");
+        await TestApp.SendAsync(updateActivityTypeCmd);
+
+        //Тогда: Тип события создан
+        activityTypeQuery = new ActivityTypeQuery(userId, daytimeSleepATId);
+        activityTypes = await TestApp.SendAsync(activityTypeQuery);
+
+        activityTypes.ShouldNotBeNull();
+        activityTypes.Count().ShouldBe(1);
+        activityTypes[0].Id.ShouldBe(daytimeSleepATId);
+        activityTypes[0].UserId.ShouldBe(userId);
+        activityTypes[0].Name.ShouldBe("Дневной сон");
         #endregion
 
         #region Получение всех типов событий для пользователя
