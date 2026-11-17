@@ -19,14 +19,17 @@ public class CreateActivityCommandHandler : IRequestHandler<CreateActivityComman
     private readonly IApplicationDbContext _context;
     private readonly IActivityRepository _activityRepository;
     private readonly IActivityTypeRepository _activityTypeRepository;
+    private readonly IUnitOfWork _uow;
 
     public CreateActivityCommandHandler(IApplicationDbContext context,
         IActivityRepository activityRepository,
-        IActivityTypeRepository activityTypeRepository)
+        IActivityTypeRepository activityTypeRepository,
+        IUnitOfWork uow)
     {
         _context = context;
         _activityRepository = activityRepository;
         _activityTypeRepository = activityTypeRepository;
+        _uow = uow;
     }
 
     public async Task<int> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
@@ -40,7 +43,8 @@ public class CreateActivityCommandHandler : IRequestHandler<CreateActivityComman
         var activity = await _factory.CreateActivity(request.UserId, activityType, request.ActivityDate, request.Metric);
 
         await _activityRepository.AddAsync(activity);
-        return await _context.SaveChangesAsync(cancellationToken);
+        
+        return await _uow.SaveChangesAsync(cancellationToken);
 
         //return activity.Id;
     }

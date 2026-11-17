@@ -10,5 +10,4 @@ public interface IApplicationDbContext
     IQueryable<Activity> Activities { get; }
     IQueryable<ActivityType> ActivityTypes { get; }
     DbSet<Project> Projects { get; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

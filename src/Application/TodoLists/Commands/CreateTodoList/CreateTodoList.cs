@@ -30,7 +30,7 @@ public class CreateTodoListCommandHandler : IRequestHandler<CreateTodoListComman
 
         _context.TodoLists.Add(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        //await _context.SaveChangesAsync(cancellationToken);
 
         return entity.Id;
     }

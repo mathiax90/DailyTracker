@@ -1,5 +1,6 @@
 ﻿using DailyTracker.Application.Common.Interfaces;
 using DailyTracker.Domain.Repositories;
+using DailyTracker.Infrastructure;
 using DailyTracker.Infrastructure.Data;
 using DailyTracker.Infrastructure.Data.Interceptors;
 using DailyTracker.Infrastructure.Identity;
@@ -35,6 +36,7 @@ public static class DependencyInjection
         //builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
         builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 

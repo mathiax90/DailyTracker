@@ -1,4 +1,6 @@
-﻿namespace DailyTracker.Domain.Entities;
+﻿using Ardalis.GuardClauses;
+
+namespace DailyTracker.Domain.Entities;
 
 /// <summary>
 /// Тип активности/события
@@ -12,8 +14,8 @@ public class ActivityType : BaseAuditableEntity
     /// Признак что объект создан разработчиками, а не пользователем
     /// </summary>
     public bool IsSystem { get; private set; } = false;
+    public int? ProjectId { get; private set; }
     public Project? Project { get; private set; }
-    
     private int _dayLimit = 0;
 
     /// <summary>
@@ -45,8 +47,12 @@ public class ActivityType : BaseAuditableEntity
     /// <param name="name">Название</param>
     /// <param name="metricType">Тип метрики</param>
     /// <param name="dayLimit">Лимит события в день</param>
-    public ActivityType(Guid userId, string name, MetricType metricType, int dayLimit = 0)
+    public ActivityType(Guid userId, string name, MetricType metricType, int dayLimit)
     {
+        Guard.Against.Default(userId);
+        Guard.Against.NullOrWhiteSpace(name);
+        Guard.Against.NegativeOrZero(dayLimit);
+
         UserId = userId;
         Name = name;
         MetricType = metricType;
@@ -61,10 +67,10 @@ public class ActivityType : BaseAuditableEntity
     /// <param name="metricType">Тип метрики</param>
     /// <param name="dayLimit">Лимит события в день</param>
     /// <param name="project">Проект</param>
-    public ActivityType(Guid userId, string name, MetricType metricType, Project project, int dayLimit = 0):
+    public ActivityType(Guid userId, string name, MetricType metricType, int projectId, int dayLimit):
         this(userId, name, metricType, dayLimit)
     {
-        Project = project;
+        ProjectId = projectId;
     }
 
     /// <summary>
@@ -77,10 +83,13 @@ public class ActivityType : BaseAuditableEntity
     /// <param name="dayLimit"></param>
     public ActivityType(int sysActTypeId, string name, MetricType metricType, int dayLimit = 0)
     {
+        Guard.Against.NullOrWhiteSpace(name);
+        Guard.Against.NegativeOrZero(dayLimit);
+
         Name = name;
         MetricType = metricType;
         DayLimit = dayLimit;
-        
+
         if (sysActTypeId >= 0)
         {
             throw new DomainException("Системные типы событий должны иметь отрицательный идентификатор.");

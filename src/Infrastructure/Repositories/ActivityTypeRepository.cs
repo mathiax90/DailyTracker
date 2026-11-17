@@ -21,4 +21,9 @@ public class ActivityTypeRepository : IActivityTypeRepository
     {
         return _context.ActivityTypesSet.FirstOrDefault(x => x.Id == id);
     }
+
+    public async Task AddAsync(ActivityType activityType)
+    {
+        await _context.ActivityTypesSet.AddAsync(activityType);
+    }
 }

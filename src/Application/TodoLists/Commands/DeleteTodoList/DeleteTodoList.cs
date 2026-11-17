@@ -23,6 +23,6 @@ public class DeleteTodoListCommandHandler : IRequestHandler<DeleteTodoListComman
 
         _context.TodoLists.Remove(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        //await _context.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using DailyTracker.Application.Activities.Commands.CreateActivityCommand;
 using DailyTracker.Application.Activities.Queries.ActivityQuery;
+using DailyTracker.Application.ActivityTypes.Commands.CreateActivityTypeCommand;
+using DailyTracker.Application.ActivityTypes.Queries.ActivityTypeQuery;
 using DailyTracker.Domain.Constants;
 
 namespace DailyTracker.Application.FunctionalTests.Common;
@@ -9,6 +11,7 @@ public class MainTest : CleanTestBase
     [Test]
     public async Task MainCase()
     {
+        //Создание события с системным типом
         //Дано: Пользователь и Системные типы событий
         Guid userId = Guid.Parse(await TestApp.RunAsDefaultUserAsync());
 
@@ -27,18 +30,34 @@ public class MainTest : CleanTestBase
         activities[0].UserId.ShouldBe(userId);
         activities[0].MetricValue.ShouldBe("00:10 (10 мин.)");
 
+        //Создание Пользователького типа события
         //Дано: Пользователь
 
         //Когда: Создаём Тип события
-        //CreateActivityTypeCommand createActivityTypeCommand = new CreateActivityTypeCommand(userId, "Длительность дневного сна", Domain.Enums.MetricType.Duration, null, 2);
-        //int daytimeSleepATId = await TestApp.SendAsync(createActivityTypeCommand);
+        CreateActivityTypeCommand createActivityTypeCommand = new CreateActivityTypeCommand(userId, "Длительность дневного сна", Domain.Enums.MetricType.Duration, null, 2);
+        int daytimeSleepATId = await TestApp.SendAsync(createActivityTypeCommand);
 
-        ////Тогда: Тип события создан
-        //ActivityTypeQuery activityTypeQuery = new ActivityTypeQuery(userId, daytimeSleepATId);
-        //List<ActivityTypeDto> activityTypes = await TestApp.SendAsync(activityTypeQuery);
+        //Тогда: Тип события создан
+        ActivityTypeQuery activityTypeQuery = new ActivityTypeQuery(userId, daytimeSleepATId);
+        List<ActivityTypeDto> activityTypes = await TestApp.SendAsync(activityTypeQuery);
 
+        activityTypes.ShouldNotBeNull();
+        activityTypes.Count().ShouldBe(1);
+        activityTypes[0].Id.ShouldBe(daytimeSleepATId);
+        activityTypes[0].UserId.ShouldBe(userId);
+        activityTypes[0].Name.ShouldBe("Длительность дневного сна");
 
-        //activityTypes.ShouldNotBeNull();
+        //получение всех типов событий для пользователя
+
+        //Дано: Пользователь с одним Типом события и тремя системными
+
+        //Когда: Запрашиваем типы событий
+        activityTypeQuery = new ActivityTypeQuery(userId, null);
+        activityTypes = await TestApp.SendAsync(activityTypeQuery);
+
+        //Тогда: Получаем 4 типа событий
+        activityTypes.ShouldNotBeNull();
+        activityTypes.Count().ShouldBe(4);
 
 
         //item.ShouldNotBeNull();
